@@ -37,8 +37,7 @@ namespace ProyectoFinal
             if (dataGridViewOrdenes.SelectedRows.Count > 0)
             {
                 int orderID = Convert.ToInt32(dataGridViewOrdenes.SelectedRows[0].Cells["Nro"].Value);
-                FrmDetalle frmDetalle = new FrmDetalle();
-                frmDetalle.SetDataAndOrderId(data, orderID);
+                FrmDetalle frmDetalle = new FrmDetalle(data, orderID);
                 frmDetalle.ShowDialog();
             }
         }

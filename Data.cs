@@ -90,7 +90,7 @@ namespace ProyectoFinal
                         {
                             Product producto = new Product();
                             producto.IdProducto = Convert.ToInt32(reader["ProductID"]);
-                            producto.Producto = reader["ProductName"].ToString();
+                            producto.Producto = reader["Producto"].ToString();
                             productos.Add(producto);
                         }
                     }
@@ -100,7 +100,22 @@ namespace ProyectoFinal
             return productos;
         }
 
-        public void Agregar_Producto(int orderID, int productID)
+        public string GetProductName(int productID)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT ProductName FROM Products WHERE ProductID = @ProductID";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ProductID", productID);
+                    return Convert.ToString(command.ExecuteScalar());
+                }
+            }
+        }
+
+        public void AgregarProducto(int orderID, int productID)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -112,6 +127,7 @@ namespace ProyectoFinal
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderID", orderID);
                     cmd.Parameters.AddWithValue("@ProductID", productID);
+
                     cmd.ExecuteNonQuery();
                 }
             }

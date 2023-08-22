@@ -14,22 +14,24 @@ namespace ProyectoFinal
     {
         private Data data;
         private int orderID;
-        private FrmDetalle frmDetalle;
+        private int productID;
 
-        public FrmAgregar(Data data, FrmDetalle frmDetalle)
+        public FrmAgregar(Data data, int orderID)
         {
             InitializeComponent();
             this.data = data;
             this.orderID = orderID;
-            this.frmDetalle = frmDetalle;
-            LoadProductos();
         }
+
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem is Product selectedProduct)
+            if (comboBox1.SelectedItem != null)
             {
-                textBox1.Text = selectedProduct.Producto;
+                Product selectedProduct = (Product)comboBox1.SelectedItem;
+                productID = selectedProduct.IdProducto;
+                string productName = data.GetProductName(productID);
+                textBox1.Text = productName;
             }
         }
 
@@ -40,27 +42,27 @@ namespace ProyectoFinal
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedItem is Product selectedProduct)
+            if (comboBox1.SelectedItem != null)
             {
-                int productID = selectedProduct.IdProducto;
-                data.Agregar_Producto(orderID, productID);
+                data.AgregarProducto(orderID, productID);
 
-                frmDetalle.RefreshDetalle(); 
-                Close(); 
+                MessageBox.Show("Producto agregado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un producto antes de agregar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void FrmAgregar_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void LoadProductos()
         {
             List<Product> productos = data.Lista_Productos(); ;
             comboBox1.DataSource = productos;
             comboBox1.DisplayMember = "Producto";
             comboBox1.ValueMember = "IdProducto";
         }
+
+        
     }
 }

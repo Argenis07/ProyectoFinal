@@ -15,24 +15,19 @@ namespace ProyectoFinal
         private int orderID;
         private Data data;
 
-        public FrmDetalle()
+        public FrmDetalle(Data data, int orderID)
         {
             InitializeComponent();
-        }
-
-        public void SetDataAndOrderId(Data newData, int newOrderID)
-        {
-            data = newData;
-            orderID = newOrderID;
-            LoadDetalleOrden();
+            this.data = data;
+            this.orderID = orderID;
         }
 
         private void FrmDetalle_Load(object sender, EventArgs e)
         {
-            
+            LoadDetalleOrden();
         }
 
-        private void LoadDetalleOrden()
+        public void LoadDetalleOrden()
         {
             List<Product> detalleOrden = data.DetalleOrden(orderID);
             dataGridView1.DataSource = detalleOrden;
@@ -40,13 +35,10 @@ namespace ProyectoFinal
 
         private void btnagregar_Click(object sender, EventArgs e)
         {
-            FrmAgregar frmAgregar = new FrmAgregar(data, this);
+            FrmAgregar frmAgregar = new FrmAgregar(data, orderID);
             frmAgregar.ShowDialog();
+            LoadDetalleOrden();
         }
 
-        public void RefreshDetalle()
-        {
-            dataGridView1.DataSource = data.DetalleOrden(orderID);
-        }
     }
 }
